@@ -536,29 +536,15 @@
                         }}
                     }}
                 }}
-                stage('Publish Debian Linux Packages') {{
-                    when {{
-                        expression {{ env.VERIFICATION_RESULT != "2" && params.PUBLISH == true && params.RELEASE == true && JOB_NAME ==~ /((\S*)(release-linux_x86_64)(\S*))/ }}
-                    }}
-                    steps {{
-                        build job: 'debian-package', propagate: false, wait: true, parameters:
-                            [
-                                string(name: 'GIT_TAG_NAME', value: env.SAPMACHINE_VERSION),
-                                [$class: 'BooleanParameterValue', name: 'DEPLOY', value: true]
-                            ]
-                    }}
-                }}
                 stage('Build Debian Linux Packages') {{
+                    {docker_agent}
                     when {{
+                        // todo: enhance this to inlucde aarch64 and ppc64le
                         expression {{ env.VERIFICATION_RESULT != "2" && params.PUBLISH == true && params.RELEASE == true && JOB_NAME ==~ /((\S*)(release-linux_x86_64)(\S*))/ }}
                     }}
                     steps {{
-                        build job: 'build-debian-package', propagate: false, wait: true, parameters:
-                            [
-                                string(name: 'GIT_TAG_NAME', value: env.SAPMACHINE_VERSION),
-                                [$class: 'BooleanParameterValue', name: 'DEPLOY', value: true],
-                                string(name: 'JOB_NAME', value: JOB_NAME)
-                            ]
+                        sh 'rm -f *.deb'  // todo: check if this is needed
+                        sh "python3 SapMachine-Infrastructure/lib/make_deb.py --tag=${params.GIT_TAG_NAME} -a linux_x86_64 --templates-directory=SapMachine-Infrastructure/debian-templates" // todo: specify a non-hardcoded architecture/platform
                     }}
                 }}
                 stage('Publish Debian Linux Packages (publish only)') {{
@@ -566,11 +552,14 @@
                         expression {{ env.VERIFICATION_RESULT != "2" && params.PUBLISH == true && params.RELEASE == true && JOB_NAME ==~ /((\S*)(release-linux_x86_64)(\S*))/ }}
                     }}
                     steps {{
-                        build job: 'publish-debian-package', propagate: false, wait: true, parameters:
+                        /* hier müssen wir vermutlich den (neuen) Job rufen, der das Debian Paket auf dist.sapmachine.io deployed.
+                           Spannend ist, wie wir das .deb Paket aus dieser Pipeline da rüber bekommen.
+                           Eventuell kann man diese Stage aber auch auf dem 'agent-ubuntu-local' ausführen und direkt das Deploy Skript rufen. Vielleicht sieht er dann das workdir mit dem .deb File. */
+    build job: 'debian-package-x86', propagate: false, wait: true, parameters: // todo: don't hardcode x86
                             [
                                 string(name: 'GIT_TAG_NAME', value: env.SAPMACHINE_VERSION),
-                                [$class: 'BooleanParameterValue', name: 'DEPLOY', value: true],
-                                string(name: 'JOB_NAME', value: JOB_NAME)
+                                [$class: 'BooleanParameterValue', name: 'DEPLOY', value: true], // todo: brauchen wir nicht. Der soll halt immer deployen, wenn er gerufen wird
+                                string(name: 'JOB_NAME', value: JOB_NAME) // todo: ich glaube, wir sollten statt JOB_NAME eher einen Plattform Parameter haben
                             ]
                     }}
                 }}
