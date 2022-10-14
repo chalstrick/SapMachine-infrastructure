@@ -6,12 +6,14 @@ ARG DEVKIT_VERSION=12-8.3.0.1
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-RUN apt-get update && apt-get install -qq -y --no-install-recommends \
+RUN apt-get update && apt-get install -y \
 autoconf \
 ca-certificates \
 cpio \
 curl \
-file \
+	dh-make \
+	devscripts build-essential lintian \
+	file \
 git \
 libasound2-dev \
 libcups2-dev \

@@ -94,10 +94,7 @@ def main(argv=None):
     tag = SapMachineTag.from_string(args.tag)
     version = tag.get_version_string().replace('-', '.')
     jdk_name = str.format('sapmachine-{0}-jdk-{1}', tag.get_major(), version)
-    print(f"Chris: version: {version}, tag: {vars(tag)}, tag.getmajor: {tag.get_major()}, version: {version}, args.architecture: {args.architecture}, jdk_name: {jdk_name}")
-    assets = utils.get_asset_urls(tag, args.architecture, ["jdk"])
-    print(f"Chris: assets: {assets}")
-    jdk_url = assets['jdk']
+    jdk_url = utils.get_asset_urls(tag, args.architecture, ["jdk"])['jdk']
 
     utils.remove_if_exists(work_dir)
     mkdir(work_dir)
