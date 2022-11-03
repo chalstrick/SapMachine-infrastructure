@@ -6,7 +6,7 @@ ARG DEVKIT_VERSION=12-8.3.0.1
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -qq -y --no-install-recommends \
 autoconf \
 ca-certificates \
 cpio \

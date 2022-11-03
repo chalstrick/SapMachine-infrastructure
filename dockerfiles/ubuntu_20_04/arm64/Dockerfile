@@ -12,7 +12,9 @@ ca-certificates \
 cpio \
 curl \
 dh-make \
-	devscripts build-essential lintian \
+devscripts \
+build-essential \
+lintian \
 file \
 git \
 libasound2-dev \
