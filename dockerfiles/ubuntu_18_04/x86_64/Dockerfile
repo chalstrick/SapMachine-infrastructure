@@ -14,7 +14,8 @@ curl \
 	dh-make \
 	devscripts build-essential lintian \
 	file \
-git \
+	fakeroot \
+	git \
 libasound2-dev \
 libcups2-dev \
 libelf-dev \
