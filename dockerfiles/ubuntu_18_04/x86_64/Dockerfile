@@ -11,11 +11,13 @@ autoconf \
 ca-certificates \
 cpio \
 curl \
-	dh-make \
-	devscripts build-essential lintian \
-	file \
-	fakeroot \
-	git \
+dh-make \
+devscripts \
+build-essential \
+lintian \
+file \
+fakeroot \
+git \
 libasound2-dev \
 libcups2-dev \
 libelf-dev \
