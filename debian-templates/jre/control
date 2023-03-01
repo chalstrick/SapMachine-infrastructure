@@ -1,0 +1,30 @@
+Source: sapmachine-${major}-jre
+Section: java
+Priority: optional
+Maintainer: SapMachine Team <sapmachine@sap.com>
+Build-Depends: debhelper (>=9)
+Standards-Version: 3.9.6
+Homepage: https://sapmachine.io
+#Vcs-Git: https://github.com/SAP/sapmachine.git
+#Vcs-Browser: https://github.com/SAP/sapmachine
+
+Package: sapmachine-${major}-jre
+Architecture: ${arch}
+Provides: java-jre,
+  java2-jre, java5-jre, java6-jre,
+  java7-jre, java8-jre, java-compiler
+Depends:
+  $${jredefault:Depends},
+  $${cacert:Depends},
+  $${tzdata:Depends},
+  $${jcommon:Depends},
+  $${dlopenhl:Depends},
+  $${mountpoint:Depends},
+  $${xandsound:Depends},
+  $${dlopenjre:Depends}
+  $${shlibs:Depends},
+  $${misc:Depends},
+  libfontconfig1,
+  libnss3 (>= 2:3.17.1)
+Description: SapMachine JDK
+ The SapMachine Java Development Kit
